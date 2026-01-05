@@ -61,12 +61,14 @@
 ## Key Principles
 
 ### 1. Separation of Concerns
-- **Models**: Pure data structures, no logic
-- **Services**: Data access and API calls
-- **ViewModels**: Business logic and state management
-- **Views**: UI rendering and user input
+
+-   **Models**: Pure data structures, no logic
+-   **Services**: Data access and API calls
+-   **ViewModels**: Business logic and state management
+-   **Views**: UI rendering and user input
 
 ### 2. Unidirectional Data Flow
+
 ```
 User Action → View → ViewModel → Service → Model
                 ↑                           │
@@ -75,6 +77,7 @@ User Action → View → ViewModel → Service → Model
 ```
 
 ### 3. Component Hierarchy
+
 ```
 App.tsx (Root)
   ├── HomeScreen (Container)
@@ -93,46 +96,48 @@ App.tsx (Root)
 ### 4. Responsibility Distribution
 
 #### ViewModel Hook Pattern
+
 ```typescript
 export const useHomeViewModel = () => {
-  // State management
-  const [posts, setPosts] = useState<Post[]>([]);
-  
-  // Data fetching (Service layer)
-  useEffect(() => {
-    const data = DataService.getInstance().getPosts();
-    setPosts(data);
-  }, []);
-  
-  // Business logic
-  const toggleLike = useCallback((postId: string) => {
-    // Like logic here
-  }, []);
-  
-  // Expose interface to View
-  return { posts, toggleLike, isPostLiked };
+    // State management
+    const [posts, setPosts] = useState<Post[]>([]);
+
+    // Data fetching (Service layer)
+    useEffect(() => {
+        const data = DataService.getInstance().getPosts();
+        setPosts(data);
+    }, []);
+
+    // Business logic
+    const toggleLike = useCallback((postId: string) => {
+        // Like logic here
+    }, []);
+
+    // Expose interface to View
+    return { posts, toggleLike, isPostLiked };
 };
 ```
 
 #### View Usage
+
 ```typescript
 export const HomeScreen: React.FC = () => {
-  // ViewModel provides all logic
-  const { posts, toggleLike, isPostLiked } = useHomeViewModel();
-  
-  // View just renders
-  return (
-    <FlatList
-      data={posts}
-      renderItem={({ item }) => (
-        <PostCard 
-          post={item}
-          isLiked={isPostLiked(item.id)}
-          onLike={toggleLike}
+    // ViewModel provides all logic
+    const { posts, toggleLike, isPostLiked } = useHomeViewModel();
+
+    // View just renders
+    return (
+        <FlatList
+            data={posts}
+            renderItem={({ item }) => (
+                <PostCard
+                    post={item}
+                    isLiked={isPostLiked(item.id)}
+                    onLike={toggleLike}
+                />
+            )}
         />
-      )}
-    />
-  );
+    );
 };
 ```
 
