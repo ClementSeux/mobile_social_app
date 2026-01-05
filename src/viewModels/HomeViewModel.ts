@@ -1,11 +1,22 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Post, Story } from "../models";
-import DataService from "../services/DataService";
+import { DataService } from "../services/DataService";
 
 export const useHomeViewModel = () => {
-    const [posts, setPosts] = useState<Post[]>(DataService.getPosts());
-    const [stories] = useState<Story[]>(DataService.getStories());
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [stories, setStories] = useState<Story[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+
+    const loadPosts = useCallback(() => {
+        const postsData = DataService.getInstance().getPosts();
+        setPosts(postsData);
+    }, []);
+
+    useEffect(() => {
+        loadPosts();
+        const storiesData = DataService.getInstance().getStories();
+        setStories(storiesData);
+    }, [loadPosts]);
 
     const toggleLike = useCallback(
         (postId: string) => {

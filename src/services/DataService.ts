@@ -1,97 +1,116 @@
-import { Post, Story, User } from "../models";
+import { Post, Story, User } from '../models';
 
-class DataService {
-    private static instance: DataService;
+export class DataService {
+  private static instance: DataService;
+  private posts: Post[];
+  private currentUser: User;
 
-    private constructor() {}
+  private constructor() {
+    this.posts = this.initializePosts();
+    this.currentUser = this.initializeCurrentUser();
+  }
 
-    static getInstance(): DataService {
-        if (!DataService.instance) {
-            DataService.instance = new DataService();
-        }
-        return DataService.instance;
+  static getInstance(): DataService {
+    if (!DataService.instance) {
+      DataService.instance = new DataService();
     }
+    return DataService.instance;
+  }
 
-    getPosts(): Post[] {
-        return [
-            {
-                id: "1",
-                author: "Sarah Chen",
-                avatar: "https://i.pravatar.cc/150?img=1",
-                time: "2h ago",
-                content: "Just launched our new AI feature! Check it out 🚀",
-                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800",
-                likes: 234,
-                comments: 45,
-                shares: 12,
-            },
-            {
-                id: "2",
-                author: "Mike Johnson",
-                avatar: "https://i.pravatar.cc/150?img=12",
-                time: "5h ago",
-                content: "Beautiful sunset at the beach today 🌅",
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-                likes: 567,
-                comments: 89,
-                shares: 23,
-            },
-            {
-                id: "3",
-                author: "Emma Davis",
-                avatar: "https://i.pravatar.cc/150?img=5",
-                time: "1d ago",
-                content: "Working on something exciting! Stay tuned ✨",
-                image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
-                likes: 892,
-                comments: 134,
-                shares: 45,
-            },
-        ];
-    }
+  private initializePosts(): Post[] {
+    return [
+      {
+        id: '1',
+        author: 'Sarah Chen',
+        avatar: 'https://i.pravatar.cc/150?img=5',
+        time: '2h ago',
+        content: 'Just finished an amazing hike! The view from the top was absolutely breathtaking. 🏔️',
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+        likes: 234,
+        comments: 45,
+        shares: 12,
+      },
+      {
+        id: '2',
+        author: 'Mike Johnson',
+        avatar: 'https://i.pravatar.cc/150?img=13',
+        time: '5h ago',
+        content: "Working on some exciting new AI features for our app. Can't wait to share them with you all! 🚀",
+        likes: 189,
+        comments: 23,
+        shares: 8,
+      },
+      {
+        id: '3',
+        author: 'Emma Davis',
+        avatar: 'https://i.pravatar.cc/150?img=9',
+        time: '1d ago',
+        content: 'Coffee and code - the perfect combination for a productive morning ☕️💻',
+        image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800',
+        likes: 412,
+        comments: 67,
+        shares: 19,
+      },
+    ];
+  }
 
-    getStories(): Story[] {
-        return [
-            {
-                id: "1",
-                name: "Your Story",
-                avatar: "https://i.pravatar.cc/150?img=30",
-                isYou: true,
-            },
-            {
-                id: "2",
-                name: "Alex",
-                avatar: "https://i.pravatar.cc/150?img=15",
-            },
-            {
-                id: "3",
-                name: "Jordan",
-                avatar: "https://i.pravatar.cc/150?img=20",
-            },
-            {
-                id: "4",
-                name: "Taylor",
-                avatar: "https://i.pravatar.cc/150?img=25",
-            },
-            {
-                id: "5",
-                name: "Morgan",
-                avatar: "https://i.pravatar.cc/150?img=33",
-            },
-        ];
-    }
+  private initializeCurrentUser(): User {
+    return {
+      id: '1',
+      name: 'Alex Morgan',
+      avatar: 'https://i.pravatar.cc/150?img=1',
+      bio: 'Digital creator | Tech enthusiast | Coffee lover',
+      postsCount: 127,
+      followersCount: 1234,
+      followingCount: 567,
+    };
+  }
 
-    getCurrentUser(): User {
-        return {
-            id: "1",
-            name: "Your Name",
-            avatar: "https://i.pravatar.cc/150?img=30",
-            bio: "AI Enthusiast | Tech Lover | Creator",
-            postsCount: 142,
-            followersCount: 2500,
-            followingCount: 342,
-        };
-    }
+  getPosts(): Post[] {
+    return [...this.posts];
+  }
+
+  addPost(post: Post): void {
+    this.posts.unshift(post);
+    this.currentUser.postsCount++;
+  }
+
+  getStories(): Story[] {
+    return [
+      {
+        id: '1',
+        name: 'Your Story',
+        avatar: 'https://i.pravatar.cc/150?img=30',
+        isYou: true,
+      },
+      {
+        id: '2',
+        name: 'Alex',
+        avatar: 'https://i.pravatar.cc/150?img=15',
+      },
+      {
+        id: '3',
+        name: 'Jordan',
+        avatar: 'https://i.pravatar.cc/150?img=20',
+      },
+      {
+        id: '4',
+        name: 'Taylor',
+        avatar: 'https://i.pravatar.cc/150?img=25',
+      },
+      {
+        id: '5',
+        name: 'Morgan',
+        avatar: 'https://i.pravatar.cc/150?img=33',
+      },
+    ];
+  }
+
+  getCurrentUser(): User {
+    return { ...this.currentUser };
+  }
+
+  updateCurrentUser(user: User): void {
+    this.currentUser = { ...user };
+  }
 }
-
-export default DataService.getInstance();

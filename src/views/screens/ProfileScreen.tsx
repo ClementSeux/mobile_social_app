@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useProfileViewModel } from '../../viewModels/ProfileViewModel';
+import { EditProfileModal } from '../components/EditProfileModal';
 
 export const ProfileScreen: React.FC = () => {
-  const { user } = useProfileViewModel();
+  const { user, refreshUser } = useProfileViewModel();
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
   return (
     <ScrollView style={styles.container}>
@@ -28,9 +30,15 @@ export const ProfileScreen: React.FC = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.editButton}>
+      <TouchableOpacity style={styles.editButton} onPress={() => setIsEditModalVisible(true)}>
         <Text style={styles.editButtonText}>Edit Profile</Text>
       </TouchableOpacity>
+
+      <EditProfileModal
+        visible={isEditModalVisible}
+        onClose={() => setIsEditModalVisible(false)}
+        onSave={refreshUser}
+      />
     </ScrollView>
   );
 };
