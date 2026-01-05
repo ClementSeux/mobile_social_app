@@ -3,8 +3,10 @@ import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { HomeScreen, SearchScreen, CreateScreen, NotificationsScreen, ProfileScreen } from './src/views/screens';
 import { BottomNavigation } from './src/views/components';
 
+type TabType = 'home' | 'search' | 'create' | 'notifications' | 'profile';
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState<TabType>('home');
 
   const renderScreen = () => {
     switch (activeTab) {
