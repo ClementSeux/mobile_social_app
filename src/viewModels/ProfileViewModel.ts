@@ -3,20 +3,30 @@ import { User } from "../models";
 import { DataService } from "../services/DataService";
 
 export const useProfileViewModel = () => {
-    const [user, setUser] = useState<User>({} as User);
+    const [user, setUser] = useState<User>({
+        id: "",
+        name: "",
+        avatar: "",
+        bio: "",
+        postsCount: 0,
+        followersCount: 0,
+        followingCount: 0,
+    });
+    const [media, setMedia] = useState<string[]>([]);
 
-    const loadUser = useCallback(() => {
-        const currentUser = DataService.getInstance().getCurrentUser();
-        setUser(currentUser);
+    const loadProfile = useCallback(() => {
+        const dataService = DataService.getInstance();
+        setUser(dataService.getCurrentUser());
+        setMedia(dataService.getProfileMedia());
     }, []);
 
     useEffect(() => {
-        loadUser();
-    }, [loadUser]);
+        loadProfile();
+    }, [loadProfile]);
 
     const refreshUser = useCallback(() => {
-        loadUser();
-    }, [loadUser]);
+        loadProfile();
+    }, [loadProfile]);
 
-    return { user, refreshUser };
+    return { user, media, refreshUser };
 };

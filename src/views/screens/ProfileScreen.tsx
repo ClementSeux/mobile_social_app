@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useProfileViewModel } from '../../viewModels/ProfileViewModel';
 import { EditProfileModal } from '../components/EditProfileModal';
 
 export const ProfileScreen: React.FC = () => {
-  const { user, refreshUser } = useProfileViewModel();
+  const { user, media, refreshUser } = useProfileViewModel();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const gridItemSize = (Dimensions.get('window').width - 30 - 12) / 3;
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <Image source={{ uri: user.avatar }} style={styles.avatar} />
         <Text style={styles.name}>{user.name}</Text>
@@ -34,6 +35,21 @@ export const ProfileScreen: React.FC = () => {
         <Text style={styles.editButtonText}>Edit Profile</Text>
       </TouchableOpacity>
 
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Posts</Text>
+        <Text style={styles.sectionMeta}>{media.length} photos</Text>
+      </View>
+
+      <View style={styles.grid}>
+        {media.map((uri, index) => (
+          <Image
+            key={`${uri}-${index}`}
+            source={{ uri }}
+            style={[styles.gridItem, { width: gridItemSize, height: gridItemSize }]}
+          />
+        ))}
+      </View>
+
       <EditProfileModal
         visible={isEditModalVisible}
         onClose={() => setIsEditModalVisible(false)}
@@ -47,6 +63,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  content: {
+    paddingBottom: 120,
   },
   header: {
     alignItems: 'center',
@@ -105,5 +124,32 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#fff',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 25,
+    marginHorizontal: 15,
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  sectionMeta: {
+    fontSize: 13,
+    color: '#868e96',
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 15,
+    gap: 6,
+  },
+  gridItem: {
+    borderRadius: 10,
+    backgroundColor: '#e9ecef',
   },
 });

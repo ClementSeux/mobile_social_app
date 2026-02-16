@@ -4,10 +4,12 @@ export class DataService {
     private static instance: DataService;
     private posts: Post[];
     private currentUser: User;
+    private profileMedia: string[];
 
     private constructor() {
         this.posts = this.initializePosts();
         this.currentUser = this.initializeCurrentUser();
+        this.profileMedia = this.initializeProfileMedia();
     }
 
     static getInstance(): DataService {
@@ -69,6 +71,20 @@ export class DataService {
         };
     }
 
+    private initializeProfileMedia(): string[] {
+        return [
+            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+            "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800",
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800",
+            "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?w=800",
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800",
+            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+            "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800",
+            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+        ];
+    }
+
     getPosts(): Post[] {
         return [...this.posts];
     }
@@ -115,5 +131,9 @@ export class DataService {
 
     updateCurrentUser(user: User): void {
         this.currentUser = { ...user };
+    }
+
+    getProfileMedia(): string[] {
+        return [...this.profileMedia];
     }
 }
